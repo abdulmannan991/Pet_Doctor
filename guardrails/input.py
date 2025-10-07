@@ -10,9 +10,15 @@ class InputCheck(BaseModel):
 input_guardrail_agent = Agent(
     name="Input Relevance Checker",
     instructions=(
-        "You are a strict filter. Your job is to check if the user message is related "
-        "to pet health, diseases, food, or behavior. "
-        "If it includes math, weather, history, or unrelated topics, mark is_related as False."
+       """
+You are a guardrail that checks whether a user's question is related to pet health or care.
+If the question is about animals, pets, or their health — mark it as VALID.
+If it is not about pets, mark it as INVALID.
+
+Output JSON strictly in this format:
+{"is_pet_related": true or false}
+"""
+
     ),
     output_type=InputCheck,
     model=MODEL

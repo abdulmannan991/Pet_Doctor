@@ -14,9 +14,21 @@ class OutputData(BaseModel):
 
 output_guardrail_agent = Agent(
     name="Guardrail Check",
-    instructions="Check if the output message includes any math expression. "
-                 "If it does, set is_Output to False. Otherwise, True. "
-                 "Provide a brief summary in one line.",
+    instructions="""You are an output guardrail for a veterinary assistant AI.
+
+Check the assistant’s final message.  
+If the response is:
+- Relevant to pet health, animals, or veterinary guidance,
+- Safe (no harmful advice or human medication for pets),
+- And does NOT contain unrelated or math content,
+
+Then output: {"is_Output": true}
+
+Otherwise, if the answer is off-topic, unsafe, or irrelevant,
+output: {"is_Output": false}
+
+Respond ONLY in JSON — no explanations.
+""",
     output_type=OutputData,
     model=MODEL
 )
@@ -30,5 +42,7 @@ async def output_pet_guardrail(ctx: RunContextWrapper, agent: Agent, output_mess
 
     return GuardrailFunctionOutput(
     output_info=result.final_output,
-    tripwire_triggered=result.final_output.is_Output == False
+    tripwire_triggered = not getattr(result.final_output, "is_Output", False)
+
+
 )

@@ -16,7 +16,7 @@ output_guardrail_agent = Agent(
     name="Guardrail Check",
     instructions="""You are an output guardrail for a veterinary assistant AI.
 
-Check the assistant’s final message.  
+Check the assistants final message.  
 If the response is:
 - Relevant to pet health, animals, or veterinary guidance,
 - Safe (no harmful advice or human medication for pets),
